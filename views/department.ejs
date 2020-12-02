@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row" style="margin-top: 100px;">
+            <table class="table-bordered table-dark table-hover table">
+                <thead>
+                    <th>
+                        department Name
+                    </th>
+                    <th>
+                        department Code
+                    </th>
+                    <th>
+                        department
+                    </th>
+                   
+                </thead>
+            
+            <% for (var i = 0; i < department.length; i++) { %>
+                
+                    
+                        
+                        
+                            <tr>
+                            <td><%= department[i].deptName %></td>
+                            <td><%= department[i].deptCode %></td>
+                            <td><%= department[i].details %></td>
+                          
+                            </tr>
+            <% } %>
+        </table>
+        </div>
+            <% if (pages > 0) { %>
+                <ul class="pagination text-center">
+                    <% if (current == 1) { %>
+                        <li class="disabled"><a>First</a></li>
+                    <% } else { %>
+                        <li><a href="/department/1">First</a></li>
+                    <% } %>
+                    <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                    <% if (i !== 1) { %>
+                        <li class="disabled"><a>...</a></li>
+                    <% } %>
+                    <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                        <% if (i == current) { %>
+                            <li class="active"><a><%= i %></a></li>
+                        <% } else { %>
+                            <li><a href="/department/<%= i %>"><%= i %></a></li>
+                        <% } %>
+                        <% if (i == Number(current) + 4 && i < pages) { %>
+                            <li class="disabled"><a>...</a></li>
+                        <% } %>
+                    <% } %>
+                    <% if (current == pages) { %>
+                        <li class="disabled"><a>Last</a></li>
+                    <% } else { %>
+                        <li><a href="/department/<%= pages %>">Last</a></li>
+                    <% } %>
+                </ul>
+            <% } %>
+            
+    </div>
+    <a href="/" class="btn btn-primary btn-lg" style="margin-left: 45%;">HOME  </a>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <eta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD</title>
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body  style="margin-top: 100px; text-align: center;">
+    <div id="menu" style="margin-top: 100px; text-align: center;">
+        <a href="departmentDropdown/"  class="btn btn-primary btn-lg" id="" value="Employee" >Create Employee</a>
+        <button type="button" class="btn btn-primary btn-lg" id="createDepartment" value="department" >Create Department</button>
+        <button type="button" class="btn btn-primary btn-lg" id="EmployeeList" value="Employee" >Edit Employee </button>
+        <button type="button" class="btn btn-primary btn-lg" id="DepartmentList" value="Employee" >Edit Department </button>
+        <a href="employee/1" class="btn btn-primary btn-lg">Get Employee List</a>
+        <a href="/depart/1" class="btn btn-primary btn-lg">Get department List</a>
+       
+    </div>
+    <form action="/employee/" method="POST" style="display: none;" id="employee_form"> 
+        <a href="http://localhost:3000/" class="btn btn-primary btn-lg">HOME</a>
+        <div id="top">
+            <input class="" type="text" name="empName" id="empName" placeholder="Enter employee Name" value="">
+            <input class="" type="text" name="employeeCode" id="empCode" placeholder="enter employee code" value="" required>
+            <input class="" type="text" name="department" id="empDept" placeholder="enter department ID" value="" required> 
+            <input class="" type="date" name="DOJ" id="empDOJ" placeholder="enter DOJ" value="">
+
+            <button type="submit"  class ="btn btn-primary" id="buttonAdd" value="ADD">ADD</button> 
+            <button type="button"  class ="btn btn-success" id="buttonemp" style="display: none;" value="">update</button> 
+        </div>
+     </form>
+     <form action="/department" method="POST" style="display: none;" id="department_form"> 
+        <a href="http://localhost:3000/" class="btn btn-primary btn-lg">HOME</a>
+        <div id="top">
+            <input class="" type="text" name="deptName" id="deptName" placeholder="Enter Department Name" value="">
+            <input class="" type="text" name="deptCode" id="deptCode" placeholder="Enter Department code" value="">
+            <input class="" type="text" name="details" id="details"  placeholder="Enter Department details" value="" > 
+            
+
+            <button type="submit"  class ="btn btn-primary" id="deptAdd" value="ADD">ADD</button> 
+            <button type="button"  class ="btn btn-success" id="buttondept" style="display: none;" value="">updatedept</button> 
+        </div>
+     </form>
+     
+
+     
+     <script>
+        jQuery( "#createEmployee" ).click(function() {
+           jQuery("#employee_form").css("display", "");
+           jQuery("#buttonAdd").css("display", "");
+           jQuery("#buttondept").css("display", "none");
+           jQuery("#buttonemp").css("display", "none");
+           jQuery("#createEmployee").css("display", "none");
+           jQuery("#department_form").css("display", "none");
+           jQuery("#createDepartment").css("display", "");
+           jQuery("#menu").css("display", "none");
+
+
+        });
+        jQuery( "#createDepartment" ).click(function() {
+           jQuery("#department_form").css("display", "");
+           jQuery("#buttondept").css("display", "none");
+           jQuery("#buttonemp").css("display", "none");
+           jQuery("#createDepartment").css("display", "none");
+           jQuery("#employee_form").css("display", "none");
+           jQuery("#createEmployee").css("display", "");
+           jQuery("#menu").css("display", "none");
+        });
+        jQuery( "#EmployeeList" ).click(function() {
+            jQuery("#menu").css("display", "none");
+        });
+        jQuery( "#DepartmentList" ).click(function() {
+            jQuery("#menu").css("display", "none");
+        });
+        jQuery(document).load(function() {
+            jQuery("#createEmployee").css("display", "");
+            jQuery("#createDepartment").css("display", "");
+            
+        });
+        
+     </script>
+     <script src="../public/index.js"></script>
+</body>
+</html>
