@@ -7,13 +7,11 @@ type: String,
 required: 'This field is required!'
 },
 employeeCode: {
-type: String,
-unique : true
+type: String
 },
 department: {
 type: String,
-required: 'This field is required!'
-
+unique: false
 },
 DOJ: {
 type: String

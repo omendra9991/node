@@ -10,16 +10,18 @@
 </head>
 <body  style="margin-top: 100px; text-align: center;">
     <div id="menu" style="margin-top: 100px; text-align: center;">
-        <a href="departmentDropdown/"  class="btn btn-primary btn-lg" id="" value="Employee" >Create Employee</a>
-        <button type="button" class="btn btn-primary btn-lg" id="createDepartment" value="department" >Create Department</button>
-        <button type="button" class="btn btn-primary btn-lg" id="EmployeeList" value="Employee" >Edit Employee </button>
-        <button type="button" class="btn btn-primary btn-lg" id="DepartmentList" value="Employee" >Edit Department </button>
-        <a href="employee/1" class="btn btn-primary btn-lg">Get Employee List</a>
-        <a href="/depart/1" class="btn btn-primary btn-lg">Get department List</a>
-       
+        <div style="margin-top: 10px;">
+            <a href="departmentDropdown/"  class="btn btn-primary btn-lg" id="" value="Employee" >Create Employee</a>
+            <button type="button" class="btn btn-primary btn-lg" id="createDepartment" value="department" >Create Department</button><br>
+        </div>
+        
+        <div style="margin-top: 10px;">
+            <a href="employee/1" class="btn btn-secondary btn-lg">Get Employee List</a>
+            <a href="/depart/1" class="btn btn-secondary btn-lg">Get department List</a>
+        </div>
     </div>
     <form action="/employee/" method="POST" style="display: none;" id="employee_form"> 
-        <a href="http://localhost:3000/" class="btn btn-primary btn-lg">HOME</a>
+        <a href="http://localhost:3000/" style="text-align: left !important;" class="btn btn-primary btn-lg">HOME</a>
         <div id="top">
             <input class="" type="text" name="empName" id="empName" placeholder="Enter employee Name" value="">
             <input class="" type="text" name="employeeCode" id="empCode" placeholder="enter employee code" value="" required>
@@ -31,14 +33,14 @@
         </div>
      </form>
      <form action="/department" method="POST" style="display: none;" id="department_form"> 
-        <a href="http://localhost:3000/" class="btn btn-primary btn-lg">HOME</a>
-        <div id="top">
-            <input class="" type="text" name="deptName" id="deptName" placeholder="Enter Department Name" value="">
-            <input class="" type="text" name="deptCode" id="deptCode" placeholder="Enter Department code" value="">
-            <input class="" type="text" name="details" id="details"  placeholder="Enter Department details" value="" > 
+        <a href="http://localhost:3000/" style="margin-left: -20%;" class="btn btn-primary btn-lg">HOME</a>
+        <div id="top" style="border: 5px solid black; margin-left: 20%; margin-right: 20%; margin-top: 2%;">
+            <label style="margin: 10px; font-weight: bolder; font-size: large;">Department Name</label><input class="" type="text" name="deptName" id="deptName" placeholder="" value="">
+           <br><label  style="margin: 10px; font-weight: bolder; font-size: large;">Department code</label><input class="" type="text" name="deptCode" id="deptCode" placeholder="" value="">
+            <br><label style="margin: 10px; padding-left: -80px; font-weight: bolder; font-size: large;">Details</label><input class="" style="margin-left:70px;" type="text" name="details" id="details"  placeholder="" value="" > 
             
 
-            <button type="submit"  class ="btn btn-primary" id="deptAdd" value="ADD">ADD</button> 
+            <br><button type="submit"  class ="btn btn-primary" id="deptAdd" value="ADD">ADD</button> 
             <button type="button"  class ="btn btn-success" id="buttondept" style="display: none;" value="">updatedept</button> 
         </div>
      </form>
@@ -80,6 +82,7 @@
         });
         
      </script>
-     <script src="../public/index.js"></script>
+     <!-- <script src="../public/employee.js"></script>
+     <script src="../public/department.js"></script> -->
 </body>
 </html>

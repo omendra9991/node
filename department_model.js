@@ -3,12 +3,10 @@ const mongoose = require('mongoose');
 var departmentSchema = new mongoose.Schema({
 deptName: {
 type: String,
-required: 'This field is required!',
-unique : true
+required: 'This field is required!'
 },
 deptCode: {
-type: String,
-unique : true
+type: String
 },
 
 details: {

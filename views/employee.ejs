@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="../public/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+    <form action="/employee/" method="POST" style="display: none;" id="employee_form"> 
+        <a href="http://localhost:3000/" style="text-align: left !important;" class="btn btn-primary btn-lg">HOME</a>
+        <div id="top">
+            <input class="" type="text" name="empName" id="empName" placeholder="Enter employee Name" value="">
+            <input class="" type="text" name="employeeCode" id="empCode" placeholder="enter employee code" value="" required>
+            <input class="" type="text" name="department" id="empDept" placeholder="enter department ID" value="" required> 
+            <input class="" type="date" name="DOJ" id="empDOJ" placeholder="enter DOJ" value="">
+
+            <button type="submit"  class ="btn btn-primary" id="buttonAdd" value="ADD">ADD</button> 
+            <button type="button"  class ="btn btn-success" id="buttonemp" style="display: none;" value="">update</button> 
+        </div>
+     </form>
     <div class="container">
         <div class="row" style="margin-top: 100px;">
             <table class="table-bordered table-dark table-hover table">
@@ -34,6 +48,8 @@
                             <td><%= employee[i].employeeCode %></td>
                             <td><%= employee[i].DOJ %></td>
                             <td><%= employee[i].department %></td>
+                            <td><button onclick="editemp()" id="<%= employee[i]._id %>" class="btn btn-success">Edit</button></td>
+                            <td><button onclick="deleteData()" id="<%= employee[i]._id %>" class="btn btn-danger">Delete</button></td>
                             </tr>
             <% } %>
         </table>
@@ -69,4 +85,64 @@
     </div>
     <a href="/" class="btn btn-primary btn-lg" style="margin-left: 45%;">HOME  </a>
 </body>
+<script>
+    const editemp = async() => {
+        let ID=event.target.id;
+        document.getElementById("employee_form").action = "/employee/"+ID;
+         document.getElementById("employee_form").style.display = "";
+         document.getElementById("buttonAdd").style.display = "none";
+         document.getElementById("buttonemp").style.display = "";
+         document.getElementById("buttonemp").setAttribute("id",ID);
+         const data = await fetch("http://localhost:3000/users/"+ ID);
+        //  console.log(data.empName);
+         const emp = await data.json();
+         emp.forEach(emp => {
+            document.getElementById("empName").value=emp.empName;
+            document.getElementById("empCode").value=emp.employeeCode;
+            document.getElementById("empDept").value=emp.department;
+            document.getElementById("empDOJ").value=emp.DOJ;
+            console.log(emp.empName);
+        });
+
+    }
+
+    document.getElementById("buttonemp").addEventListener('click', () => {
+    let ID=event.target.id;
+    window.location.href = "http://localhost:3000";
+    empName = document.getElementById("empName").value;
+    employeeCode = document.getElementById("empCode").value;
+    department = document.getElementById("empDept").value;
+    DOJ = document.getElementById("empDOJ").value;
+   
+    fetch("/employee/"+ID, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        empName: empName,
+        employeeCode: employeeCode,
+        department:department,
+        DOJ:DOJ
+    })
+  })
+  location.reload();
+    getAllData();
+});
+const deleteData = async() => {
+    
+    let ID=event.target.id;
+    window.location.href = "http://localhost:3000";
+    console.log("employee deleted");
+    const result = await fetch("http://localhost:3000/employee/" + ID, {
+         method: "DELETE",
+         headers: {
+             'Content-Type': 'application/json'
+        },
+        
+    });
+    location.reload();
+    getAllData();
+}
+
+</script>
+
 </html>

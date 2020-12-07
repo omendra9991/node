@@ -30,24 +30,25 @@ app.use('/public',express.static(__dirname + '/public'));
 app.get('/',(req,res)=>{
     res.sendFile(__dirname + "/public/index.html");
 });
+//get api for showing department list on create employee form.
 app.get('/departmentDropdown/', function(req, res, next) {
-    
-    // var page = req.params.page || 1
-
     department
         .find({})
         .exec(function(err, products) {
             department.countDocuments().exec(function(err, count) {
                 if (err) return next(err)
-                res.render('employeeForm', {
-                    department: products
-                   
-                })
+                else{
+                    res.render('employeeForm', {
+                        department: products
+                    
+                    })
+                } 
+
             })
         })
 })
-
-app.get("/users", (req, res) => {
+// get list of employee
+app.get("/users/", (req, res) => {
     employee.find({}, (err, result) => {
         if(err) {
             res.status(200).json({error: err});
@@ -56,25 +57,21 @@ app.get("/users", (req, res) => {
         } 
     });
 });
-app.post('/employee', function (req, res) {
+//post the employee in database
+app.post('/employee/', function (req, res,next) {
     var myData = new employee(req.body);
     myData.save(function(err, user) {
         console.log("hello");
-        if (err) {
-            alert("Employee Code shoud be unique");
-        }
+        if (err) return next(err)
         else{
             alert("employee inserted");
         }
-        
         }) 
-    
-   
     // res.send("item saved to database");
     res.sendFile(__dirname + "/public/index.html");
 });
 
- 
+ //delete selected employee
 app.delete('/employee/:id', async(req, res) => {
     const id = req.params.id;
     employee.deleteOne({_id: id}, (err) => {
@@ -82,12 +79,13 @@ app.delete('/employee/:id', async(req, res) => {
             res.status(200).json({error: err});
         }
     }).then(res => {
+        alert("employee deleted");
         res.status(200).json({message: "Ok"});
     });
     
     
 } );
-
+// get employee with id
 app.get("/users/:id", async(req, res) => {
     const id = req.params.id;
     console.log(id);
@@ -99,7 +97,7 @@ app.get("/users/:id", async(req, res) => {
         } 
     });
 });
-// update row
+// update employee with id
 app.put('/employee/:id', (req, res) => {
     console.log(req.body.empName);
     const id = req.params.id;
@@ -118,6 +116,7 @@ app.put('/employee/:id', (req, res) => {
         }
       )
         .then(result => {
+            alert("Employee Detals Updated");
            })
         .catch(error => console.error(error))
   })
@@ -144,7 +143,7 @@ app.get('/employee/:page', function(req, res, next) {
 
 
 //department crud
-
+//get department list
 app.get("/department", (req, res) => {
     department.find({}, (err, result) => {
         if(err) {
@@ -154,6 +153,7 @@ app.get("/department", (req, res) => {
         } 
     });
 });
+//post department data into database
 app.post('/department', function (req, res) {
     var myData = new department(req.body);
     myData.save(function(err, user) {
@@ -166,7 +166,7 @@ app.post('/department', function (req, res) {
     
     res.sendFile(__dirname + "/public/index.html");
 });
-
+//delete department with id
 app.delete('/department/:id', async(req, res) => {
     const id = req.params.id;
     department.deleteOne({_id: id}, (err) => {
@@ -174,11 +174,13 @@ app.delete('/department/:id', async(req, res) => {
             res.status(200).json({error: err});
         }
     }).then(res => {
+        alert("department deleted");
         res.status(200).json({message: "Ok"});
     });
     
     
 } );
+// get department with id
 app.get("/department/:id", async(req, res) => {
     const id = req.params.id;
     console.log(id);
@@ -190,6 +192,8 @@ app.get("/department/:id", async(req, res) => {
         } 
     });
 });
+
+//update deprtment with id
 app.put('/department/:id', (req, res) => {
     
     const iid = req.params.id;
@@ -200,8 +204,6 @@ app.put('/department/:id', (req, res) => {
             deptName: req.body.deptName,
             deptCode:  req.body.deptCode,
             details: req.body.details
-            
-            
           }
         },
         {
@@ -209,8 +211,8 @@ app.put('/department/:id', (req, res) => {
         }
       )
         .then(result => {
-            
-           })
+            alert("department updated");           
+        })
         .catch(error => console.error(error))
   })
 //pagination department
@@ -236,7 +238,19 @@ app.get('/depart/:page', function(req, res, next) {
             })
         })
 })
-
+//search department
+app.get('/searchDepartment/:text', function(req, res, next){
+    // let deptName = document.getElementById("searchingText").value;
+    var text= req.params.text;
+    console.log("hello");
+    department.find({"deptName": "IT"}, (err, result) => {
+        if(err) {
+            res.status(200).json({error: err});
+        } else {
+            res.json(result);
+        } 
+    });
+})
 
 
 app.listen(3000);
