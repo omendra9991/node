@@ -66,7 +66,7 @@
                     <% if (current == 1) { %>
                         <li class="disabled"><a>First</a></li>
                     <% } else { %>
-                        <li><a href="/employee/1">First</a></li>
+                        <li><a href="/employee/searchEmployee/<%= i %>/<%= Text %>/"  >First</a></li>
                     <% } %>
                     <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
                     <% if (i !== 1) { %>
@@ -76,7 +76,7 @@
                         <% if (i == current) { %>
                             <li class="active"><a><%= i %></a></li>
                         <% } else { %>
-                            <li><a href="/employee/<%= i %>"><%= i %></a></li>
+                            <li><a href="/employee/searchEmployee/<%= i %>/<%= Text %>/" ><%= i %></a></li>
                         <% } %>
                         <% if (i == Number(current) + 4 && i < pages) { %>
                             <li class="disabled"><a>...</a></li>
@@ -85,11 +85,10 @@
                     <% if (current == pages) { %>
                         <li class="disabled"><a>Last</a></li>
                     <% } else { %>
-                        <li><a href="/employee/<%= pages %>">Last</a></li>
+                        <li><a href="/employee/searchEmployee/<%= i-1 %>/<%= Text %>/">Last</a></li>
                     <% } %>
                 </ul>
             <% } %>
-
             <form style="margin-top: -60px;"> 
                 <span style="margin-left: 45%;"> 
                     <input type="text" id="searchingText" >  
@@ -104,7 +103,6 @@
 <script>
     const editemp = async() => {
         let ID=event.target.id;
-        
         document.getElementById("employee_form").action = "/employee/"+ID;
          document.getElementById("employee_form").style.display = "";
          document.getElementById("buttonAdd").style.display = "none";
@@ -121,13 +119,12 @@
             document.getElementById("empDOJ").value=emp.DOJ;
             console.log(emp.empName);
         });
-       
 
     }
 
     document.getElementById("buttonemp").addEventListener('click', () => {
     let ID=event.target.id;
-    
+    window.location.href = "http://localhost:3000";
     empName = document.getElementById("empName").value;
     employeeCode = document.getElementById("empCode").value;
     department = document.getElementById("empDept").value;
@@ -142,10 +139,9 @@
         department:department,
         DOJ:DOJ
     })
-  }) 
-  window.location.href = "http://localhost:3000/employee/<%= current %>";
-  
-    
+  })
+  location.reload();
+    getAllData();
 });
 const deleteData = async() => {
     
@@ -166,7 +162,7 @@ let searchtext = async()  => {
         let searchText = document.getElementById("searchingText").value;
         window.location.href = "http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+searchText;
         console.log(location);
-        //  await fetch("http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+ searchText);
+         await fetch("http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+ searchText);
        
     }
 </script>

@@ -20,18 +20,7 @@
             <a href="/depart/1" class="btn btn-secondary btn-lg">Get department List</a>
         </div>
     </div>
-    <form action="/employee/" method="POST" style="display: none;" id="employee_form"> 
-        <a href="http://localhost:3000/" style="text-align: left !important;" class="btn btn-primary btn-lg">HOME</a>
-        <div id="top">
-            <input class="" type="text" name="empName" id="empName" placeholder="Enter employee Name" value="">
-            <input class="" type="text" name="employeeCode" id="empCode" placeholder="enter employee code" value="" required>
-            <input class="" type="text" name="department" id="empDept" placeholder="enter department ID" value="" required> 
-            <input class="" type="date" name="DOJ" id="empDOJ" placeholder="enter DOJ" value="">
-
-            <button type="submit"  class ="btn btn-primary" id="buttonAdd" value="ADD">ADD</button> 
-            <button type="button"  class ="btn btn-success" id="buttonemp" style="display: none;" value="">update</button> 
-        </div>
-     </form>
+    
      <form action="/department" method="POST" style="display: none;" id="department_form"> 
         <a href="http://localhost:3000/" style="margin-left: -20%;" class="btn btn-primary btn-lg">HOME</a>
         <div id="top" style="border: 5px solid black; margin-left: 20%; margin-right: 20%; margin-top: 2%;">
@@ -48,18 +37,7 @@
 
      
      <script>
-        jQuery( "#createEmployee" ).click(function() {
-           jQuery("#employee_form").css("display", "");
-           jQuery("#buttonAdd").css("display", "");
-           jQuery("#buttondept").css("display", "none");
-           jQuery("#buttonemp").css("display", "none");
-           jQuery("#createEmployee").css("display", "none");
-           jQuery("#department_form").css("display", "none");
-           jQuery("#createDepartment").css("display", "");
-           jQuery("#menu").css("display", "none");
-
-
-        });
+        
         jQuery( "#createDepartment" ).click(function() {
            jQuery("#department_form").css("display", "");
            jQuery("#buttondept").css("display", "none");
@@ -69,12 +47,8 @@
            jQuery("#createEmployee").css("display", "");
            jQuery("#menu").css("display", "none");
         });
-        jQuery( "#EmployeeList" ).click(function() {
-            jQuery("#menu").css("display", "none");
-        });
-        jQuery( "#DepartmentList" ).click(function() {
-            jQuery("#menu").css("display", "none");
-        });
+       
+       
         jQuery(document).load(function() {
             jQuery("#createEmployee").css("display", "");
             jQuery("#createDepartment").css("display", "");

@@ -140,6 +140,44 @@ app.get('/employee/:page', function(req, res, next) {
             })
         })
 })
+//search employee
+app.get('/employee/searchEmployee/:page/:text', async(req, res, next)=>{
+    var perPage = 5
+   
+    var page= req.params.page;
+    if(page=="1"){
+         page =  1
+    }
+    else{
+        
+    }
+    // let deptName = document.getElementById("searchingText").value;
+    var text= req.params.text;
+    console.log(text);
+    await employee.find({"empName": text}, (err, result) => {
+        if(err) {
+            res.status(200).json({error: err});
+        } else {
+            // res.status(200).json(result);
+            // res.render('employee', {
+            //     employee: result,
+            //     current: 1,
+            //     pages: 1
+            // })
+        } 
+    }).skip((perPage * page) - perPage)
+    .limit(perPage).exec(function(err, products) {
+        employee.count().exec(function(err, count) {
+            if (err) return next(err)
+            res.render('searchEmployee', { 
+                employee: products,
+                current: page,
+                pages: Math.ceil(count / perPage),
+                Text: text
+            })
+        })
+    });
+})
 
 
 //department crud
@@ -217,10 +255,10 @@ app.put('/department/:id', (req, res) => {
   })
 //pagination department
 
-app.get('/depart/:page', function(req, res, next) {
+app.get('/depart/:page', async(req, res, next)=> {
     var perPage = 5
     var page = req.params.page || 1
-    department
+   await department
         .find({})
         .skip((perPage * page) - perPage)
         .limit(perPage)
@@ -230,24 +268,30 @@ app.get('/depart/:page', function(req, res, next) {
             department.count().exec(function(err, count) {
                 
                 if (err) return next(err)
-                res.render('department', {
-                    department: products,
-                    current: page,
-                    pages: Math.ceil(count / perPage)
-                })
+                    // res.status(200).json(products);
+                    res.render('department', {
+                        department: products,
+                        current: page,
+                        pages: Math.ceil(count / perPage)
+                    })
             })
         })
 })
 //search department
-app.get('/searchDepartment/:text', function(req, res, next){
+app.get('/depart/1/searchDepartment/:text', async(req, res, next)=>{
     // let deptName = document.getElementById("searchingText").value;
     var text= req.params.text;
-    console.log("hello");
-    department.find({"deptName": "IT"}, (err, result) => {
+    console.log(text);
+    await department.find({"deptName": text}, (err, result) => {
         if(err) {
             res.status(200).json({error: err});
         } else {
-            res.json(result);
+            // res.status(200).json(result);
+            res.render('department', {
+                department: result,
+                current: 1,
+                pages: 1
+            })
         } 
     });
 })
