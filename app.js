@@ -8,20 +8,17 @@ const mongoose = require('mongoose');
 let alert = require('alert');  
 const { body, validationResult } = require('express-validator');
 const paginate = require('express-paginate');
-
 app.set('view engine', 'ejs')
-
-
 app.use(paginate.middleware(2, 5));
 app.use(bodyParser.urlencoded({ extended: true }))
 var dbConn= mongoose.connect('mongodb+srv://omendra:omendra@cluster0.zynjw.mongodb.net/test', {useUnifiedTopology: true}, (err) => {
-if (!err) {
-console.log('Successfully Established Connection with MongoDB')
-}
-else {
-console.log('Failed to Establish Connection with MongoDB with Error: '+ err)
-}
-});
+    if (!err) {
+        console.log('Successfully Established Connection with MongoDB')
+    }
+    else {
+        console.log('Failed to Establish Connection with MongoDB with Error: '+ err)
+    }
+    });
 const employee = mongoose.model('Employee');
 const department = mongoose.model('Department');
 app.use(bodyParser.json())
@@ -58,15 +55,21 @@ app.get("/users/", (req, res) => {
     });
 });
 //post the employee in database
-app.post('/employee/', function (req, res,next) {
-    var myData = new employee(req.body);
-    myData.save(function(err, user) {
-        console.log("hello");
-        if (err) return next(err)
-        else{
-            alert("employee inserted");
-        }
-        }) 
+app.post('/employee/', [ body('employeeCode').isLength({ min: 4, max:4 }) ],function (req, res,next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    else{
+        var myData = new employee(req.body);
+        myData.save(function(err, user) {
+            console.log("hello");
+            if (err) return next(err)
+            else{
+                alert("employee inserted");
+            }
+            }) 
+    }       
     // res.send("item saved to database");
     res.sendFile(__dirname + "/public/index.html");
 });
@@ -98,28 +101,36 @@ app.get("/users/:id", async(req, res) => {
     });
 });
 // update employee with id
-app.put('/employee/:id', (req, res) => {
-    console.log(req.body.empName);
-    const id = req.params.id;
-    employee.findOneAndUpdate(
-        { _id: id },
-        {
-          $set: {
-            empName: req.body.empName,
-            employeeCode:  req.body.employeeCode,
-            department: req.body.department,
-            DOJ: req.body.DOJ
-          }
-        },
-        {
-          upsert: true
+app.put('/employee/:id',[ body('employeeCode').isLength({ min: 4, max:4 }) ], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        alert("employe code should be of length 4");
+        // return res.status(400).json({ errors: errors.array() });
+    }
+    else{
+        const id = req.params.id;
+        employee.findOneAndUpdate(
+            { _id: id },
+            {
+            $set: {
+                empName: req.body.empName,
+                employeeCode:  req.body.employeeCode,
+                department: req.body.department,
+                DOJ: req.body.DOJ
+            }
+            },
+            {
+            upsert: true
+            }
+        )
+            .then(result => {
+                alert("Employee Detals Updated");
+            })
+            .catch(error => console.error(error))
         }
-      )
-        .then(result => {
-            alert("Employee Detals Updated");
-           })
-        .catch(error => console.error(error))
-  })
+        
+    })
+
 //pagination employee
 app.get('/employee/:page', function(req, res, next) {
     var perPage = 5
@@ -142,8 +153,7 @@ app.get('/employee/:page', function(req, res, next) {
 })
 //search employee
 app.get('/employee/searchEmployee/:page/:text', async(req, res, next)=>{
-    var perPage = 5
-   
+    var perPage = 5;
     var page= req.params.page;
     if(page=="1"){
          page =  1
@@ -158,12 +168,7 @@ app.get('/employee/searchEmployee/:page/:text', async(req, res, next)=>{
         if(err) {
             res.status(200).json({error: err});
         } else {
-            // res.status(200).json(result);
-            // res.render('employee', {
-            //     employee: result,
-            //     current: 1,
-            //     pages: 1
-            // })
+           
         } 
     }).skip((perPage * page) - perPage)
     .limit(perPage).exec(function(err, products) {
@@ -192,15 +197,21 @@ app.get("/department", (req, res) => {
     });
 });
 //post department data into database
-app.post('/department', function (req, res) {
-    var myData = new department(req.body);
-    myData.save(function(err, user) {
-        if (err) {
-           alert("duplicate value");
-        }
+app.post('/department',[ body('deptCode').isLength({ min: 2, max:4 }) ], function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    else{
+        var myData = new department(req.body);
+        myData.save(function(err, user) {
+            if (err) {
+            alert("duplicate value");
+            }
 
-       
-    });
+        
+        });
+    }
     
     res.sendFile(__dirname + "/public/index.html");
 });
@@ -232,26 +243,32 @@ app.get("/department/:id", async(req, res) => {
 });
 
 //update deprtment with id
-app.put('/department/:id', (req, res) => {
-    
-    const iid = req.params.id;
-    department.findOneAndUpdate(
-        { _id: iid },
-        {
-          $set: {
-            deptName: req.body.deptName,
-            deptCode:  req.body.deptCode,
-            details: req.body.details
-          }
-        },
-        {
-          upsert: true
+app.put('/department/:id',[ body('deptCode').isLength({ min: 2, max:4 }) ], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        alert("department code should be of length 2-4");
+        // return res.status(400).json({ errors: errors.array() });
+    }
+    else{
+        const iid = req.params.id;
+        department.findOneAndUpdate(
+            { _id: iid },
+            {
+            $set: {
+                deptName: req.body.deptName,
+                deptCode:  req.body.deptCode,
+                details: req.body.details
+            }
+            },
+            {
+            upsert: true
+            }
+        )
+            .then(result => {
+                alert("department updated");           
+            })
+            .catch(error => console.error(error))
         }
-      )
-        .then(result => {
-            alert("department updated");           
-        })
-        .catch(error => console.error(error))
   })
 //pagination department
 
