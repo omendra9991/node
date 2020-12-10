@@ -105,7 +105,7 @@
             <form style="margin-top: -60px;"> 
             <div class="" style="margin-left: 50%;">
                 <label>Filter with Department</label>
-                <select class="" id="ControlSelect">
+                <select class="" id="filter">
                     <% for (var i = 0; i < departmen.length; i++) { %>
 
                          <option><%= departmen[i].deptName %> </option>
@@ -141,10 +141,10 @@
             document.getElementById("empName").value=emp.empName;
             document.getElementById("empCode").value=emp.employeeCode;
             console.log(emp.department);
-            jQuery('#selectdept option[value="' + emp.department +'"]').prop('selected', true);
+            jQuery('#selectdept option[value="'+emp.department+'"]').prop('selected', true);
             // document.getElementById("empDept").value=emp.department;
             document.getElementById("empDOJ").value=emp.DOJ;
-            console.log(emp.empName);
+            
         });
        
 
@@ -156,7 +156,7 @@
     empName = document.getElementById("empName").value;
     employeeCode = document.getElementById("empCode").value;
     
-    department = jQuery('#ControlSelect :selected').text();
+    department2 = jQuery('#selectdept :selected').text();
     DOJ = document.getElementById("empDOJ").value;
    
     fetch("/employee/"+ID, {
@@ -165,7 +165,7 @@
     body: JSON.stringify({
         empName: empName,
         employeeCode: employeeCode,
-        department:department,
+        department:department2,
         DOJ:DOJ
     })
   }) 
@@ -189,7 +189,7 @@ const deleteData = async() => {
     getAllData();
 }
 let searchtext = async()  => {
-        var filterName = $('#ControlSelect :selected').text();
+        var filterName = $('#filter :selected').text();
 
         let searchText = document.getElementById("searchingText").value;
         window.location.href = "http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+searchText+"/"+filterName;
