@@ -10,8 +10,7 @@ employeeCode: {
 type: String
 },
 department: {
-type: String,
-unique: false
+type: String
 },
 DOJ: {
 type: String

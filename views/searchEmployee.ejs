@@ -66,7 +66,7 @@
                     <% if (current == 1) { %>
                         <li class="disabled"><a>First</a></li>
                     <% } else { %>
-                        <li><a href="/employee/searchEmployee/<%= i+1 %>/<%= Text %>/"  >First</a></li>
+                        <li><a href="/employee/searchEmployee/<%= i+1 %>/<%= Text %>/<%= filterDept %>/"  >First</a></li>
                     <% } %>
                     <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
                     <% if (i !== 1) { %>
@@ -76,7 +76,7 @@
                         <% if (i == current) { %>
                             <li class="active"><a><%= i %></a></li>
                         <% } else { %>
-                            <li><a href="/employee/searchEmployee/<%= i %>/<%= Text %>/" ><%= i %></a></li>
+                            <li><a href="/employee/searchEmployee/<%= i %>/<%= Text %>/<%= filterDept %>/" ><%= i %></a></li>
                         <% } %>
                         <% if (i == Number(current) + 4 && i < pages) { %>
                             <li class="disabled"><a>...</a></li>
@@ -85,7 +85,7 @@
                     <% if (current == pages) { %>
                         <li class="disabled"><a>Last</a></li>
                     <% } else { %>
-                        <li><a href="/employee/searchEmployee/<%= i-1 %>/<%= Text %>/">Last</a></li>
+                        <li><a href="/employee/searchEmployee/<%= i-1 %>/<%= Text %>/<%= filterDept %>/">Last</a></li>
                     <% } %>
                 </ul>
             <% } %>
@@ -159,10 +159,11 @@ const deleteData = async() => {
     getAllData();
 }
 let searchtext = async()  => {
+      
         let searchText = document.getElementById("searchingText").value;
-        window.location.href = "http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+searchText;
+        window.location.href = "http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+searchText+"/"+"<%= filterDept %>";
         console.log(location);
-         await fetch("http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+ searchText);
+         await fetch("http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+ searchText+"<%= filterDept %>");
        
     }
 </script>

@@ -9,6 +9,8 @@ let alert = require('alert');
 const { body, validationResult } = require('express-validator');
 const paginate = require('express-paginate');
 app.set('view engine', 'ejs')
+const ejsLint = require('ejs-lint');
+
 app.use(paginate.middleware(2, 5));
 app.use(bodyParser.urlencoded({ extended: true }))
 var dbConn= mongoose.connect('mongodb+srv://omendra:omendra@cluster0.zynjw.mongodb.net/test', {useUnifiedTopology: true}, (err) => {
@@ -132,58 +134,70 @@ app.put('/employee/:id',[ body('employeeCode').isLength({ min: 4, max:4 }) ], (r
     })
 
 //pagination employee
-app.get('/employee/:page', function(req, res, next) {
+app.get('/employee/:page', async(req, res, next)=> {
     var perPage = 5
     var page = req.params.page || 1
-
-    employee
-        .find({})
-        .skip((perPage * page) - perPage)
-        .limit(perPage)
-        .exec(function(err, products) {
-            employee.count().exec(function(err, count) {
-                if (err) return next(err)
-                res.render('employee', {
-                    employee: products,
-                    current: page,
-                    pages: Math.ceil(count / perPage)
+   await  department.find({}, (err, result) => {
+            if(err) {
+                res.status(200).json({error: err});
+            } else {
+                 employee
+                .find({}).sort( { empName : 1} )
+                .skip((perPage * page) - perPage)
+                .limit(perPage)
+                .exec(function(err, products) {
+                    employee.count().exec(function(err, count) {
+                        if (err) return next(err)
+                        res.render('employee', {
+                            employee: products,
+                            departmen:result,
+                            current: page,
+                            pages: Math.ceil(count / perPage)
+                        })
+                    })
                 })
-            })
-        })
+            } 
+        });
+   
 })
 //search employee
-app.get('/employee/searchEmployee/:page/:text', async(req, res, next)=>{
+app.get('/employee/searchEmployee/:page/:text/:filterDept', async(req, res, next)=>{
     var perPage = 5;
     var page= req.params.page;
+    var dept= req.params.filterDept;
     if(page=="1"){
          page =  1
     }
     else{
         
     }
+    var from=page*perPage-(perPage-1);
+    var to= page*perPage;
     // let deptName = document.getElementById("searchingText").value;
     var text= req.params.text;
     console.log(text);
-    await employee.find({"empName": text}, (err, result) => {
+    await employee.find({ $or: [ { empName: text}, { department: dept } ] }, (err, result) => {
         if(err) {
             res.status(200).json({error: err});
         } else {
            
         } 
-    }).skip((perPage * page) - perPage)
+    }).sort( { empName : 1} ).skip((perPage * page) - perPage)
     .limit(perPage).exec(function(err, products) {
         employee.count().exec(function(err, count) {
             if (err) return next(err)
             res.render('searchEmployee', { 
                 employee: products,
+                from:from,
+                to:to,
                 current: page,
                 pages: Math.ceil(count / perPage),
-                Text: text
+                Text: text,
+                filterDept:dept
             })
         })
     });
 })
-
 
 //department crud
 //get department list
@@ -275,8 +289,10 @@ app.put('/department/:id',[ body('deptCode').isLength({ min: 2, max:4 }) ], (req
 app.get('/depart/:page', async(req, res, next)=> {
     var perPage = 5
     var page = req.params.page || 1
+    var from=page*perPage-(perPage-1);
+    var to= page*perPage;
    await department
-        .find({})
+        .find({}).sort( { deptName : 1} )
         .skip((perPage * page) - perPage)
         .limit(perPage)
        
@@ -288,6 +304,8 @@ app.get('/depart/:page', async(req, res, next)=> {
                     // res.status(200).json(products);
                     res.render('department', {
                         department: products,
+                        from:from,
+                        to:to,
                         current: page,
                         pages: Math.ceil(count / perPage)
                     })
@@ -310,7 +328,7 @@ app.get('/depart/1/searchDepartment/:text', async(req, res, next)=>{
                 pages: 1
             })
         } 
-    });
+    }).sort( { deptName : 1} );
 })
 
 

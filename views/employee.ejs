@@ -5,6 +5,8 @@
     <title></title>
     <link rel="stylesheet" href="../public/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
@@ -21,7 +23,14 @@
             <br><label style="margin: 10px; font-weight: bolder; font-size: large;">Employee Code </label>
                     <input class="" type="text" name="employeeCode" id="empCode" placeholder="enter employee code" value="" required>
             <br><label style="margin: 10px; font-weight: bolder; font-size: large;">Department Name</label>
-                    <input class="" type="text" name="department" id="empDept" placeholder="enter department ID" value="" required> 
+            <select name="department"  id="selectdept" style="width:fit-content; height: 30px;">
+                <option>Select Department*</option>
+                    <% for (var i = 0; i < departmen.length; i++) { %>
+                        
+                        <option value="<%= departmen[i].deptName %>"><%= departmen[i].deptName %></option>
+                    
+                    <% } %>
+            </select>
             <br><label style="margin: 10px; font-weight: bolder; padding-left: -80px; font-size: large;">DOJ </label>
                     <input class="" type="date" style="margin-left:100px;" name="DOJ" id="empDOJ" placeholder="enter DOJ" value="">
 
@@ -48,7 +57,7 @@
                          Department
                     </th>
                 </thead>
-            
+                
             <% for (var i = 0; i < employee.length; i++) { %>
                 
                     
@@ -93,8 +102,17 @@
                     <% } %>
                 </ul>
             <% } %>
-
             <form style="margin-top: -60px;"> 
+            <div class="" style="margin-left: 50%;">
+                <label>Filter with Department</label>
+                <select class="" id="ControlSelect">
+                    <% for (var i = 0; i < departmen.length; i++) { %>
+
+                         <option><%= departmen[i].deptName %> </option>
+                         <% } %>
+                </select>
+              
+              </div>
                 <span style="margin-left: 45%;"> 
                     <input type="text" id="searchingText" >  
                     <button type="button" class="btn btn-primary btn-lg" onclick="searchtext()" >Search  </button>
@@ -106,6 +124,7 @@
     
 </body>
 <script>
+       
     const editemp = async() => {
         let ID=event.target.id;
         
@@ -121,7 +140,9 @@
          emp.forEach(emp => {
             document.getElementById("empName").value=emp.empName;
             document.getElementById("empCode").value=emp.employeeCode;
-            document.getElementById("empDept").value=emp.department;
+            console.log(emp.department);
+            jQuery('#selectdept option[value="' + emp.department +'"]').prop('selected', true);
+            // document.getElementById("empDept").value=emp.department;
             document.getElementById("empDOJ").value=emp.DOJ;
             console.log(emp.empName);
         });
@@ -134,7 +155,8 @@
     
     empName = document.getElementById("empName").value;
     employeeCode = document.getElementById("empCode").value;
-    department = document.getElementById("empDept").value;
+    
+    department = jQuery('#ControlSelect :selected').text();
     DOJ = document.getElementById("empDOJ").value;
    
     fetch("/employee/"+ID, {
@@ -167,8 +189,10 @@ const deleteData = async() => {
     getAllData();
 }
 let searchtext = async()  => {
+        var filterName = $('#ControlSelect :selected').text();
+
         let searchText = document.getElementById("searchingText").value;
-        window.location.href = "http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+searchText;
+        window.location.href = "http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+searchText+"/"+filterName;
         console.log(location);
         //  await fetch("http://localhost:3000/employee/searchEmployee/"+ "<%= current %>" +"/"+ searchText);
        
