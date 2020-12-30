@@ -12,4 +12,4 @@ var dbConn= mongoose.connect(process.env.DB_CONN_STRING , {useUnifiedTopology: t
         console.log('Failed to Establish Connection with MongoDB with Error: '+ err)
     }
 });
-module.exports=app
+module.exports=app 

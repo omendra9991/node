@@ -6,16 +6,16 @@ var Department= require('./src/models/department_model');
 var EmployeeAPI=require('./src/routes/employee');
 var DepartmentAPI=require('./src/routes/department');
 var dbConn=require('./src/models/dbConn');
-app.use('/',EmployeeAPI)
-app.use('/',DepartmentAPI)
-app.use('/',dbConn)
+
 const bodyParser= require('body-parser')
-const { body, validationResult } = require('express-validator');
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(bodyParser.json())
 app.use(express.urlencoded({extended: false}));
-
+app.use('/',EmployeeAPI)
+app.use('/',DepartmentAPI)
+app.use('/',dbConn)
 app.get('/',(req,res)=>{
     res.send('Welcome to Crud Operations' ); 
     
@@ -24,4 +24,5 @@ app.get('/',(req,res)=>{
 
 
 
-app.listen(3000);
+
+module.exports = app.listen(3000);

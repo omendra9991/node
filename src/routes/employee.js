@@ -23,7 +23,8 @@ app.get("/getEmployeeList/", (req, res) => {
 app.post('/addEmployee/', [ body('employeeCode').isLength({ min: 4, max:4 }) ],function (req, res,next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        //  return res.status(400).json({ errors: errors.array() });
+        // res.send("item saved to database");
     }
     else{
         var myData = new employee(req.body);
@@ -31,13 +32,14 @@ app.post('/addEmployee/', [ body('employeeCode').isLength({ min: 4, max:4 }) ],f
             console.log("hello");
             if (err) return next(err)
             else{
-                alert("employee inserted");
+                res.status(200).json({msg:"ok, Employee added"});
             }
             }) 
     }       
-    // res.send("item saved to database");
-    // res.sendFile(__dirname + "/src/public/index.html");
+    
+    // res.sendFile(__dirname + "/public/index.html");
 });
+
 
  //delete selected employee
 app.delete('/deleteEmployee/:id', async(req, res) => {
@@ -57,7 +59,7 @@ app.delete('/deleteEmployee/:id', async(req, res) => {
 // get employee with id
 app.get("/getEmployee/:id", async(req, res) => {
     const id = req.params.id;
-    console.log(id);
+    
     employee.find({"_id": id}, (err, result) => {
         if(err) {
             res.status(200).json({error: err});
@@ -70,7 +72,7 @@ app.get("/getEmployee/:id", async(req, res) => {
 app.put('/employeeUpdate/:id',[ body('employeeCode').isLength({ min: 4, max:4 }) ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        alert("employe code should be of length 4");
+        // alert("employe code should be of length 4");
         // return res.status(400).json({ errors: errors.array() });
     }
     else{
@@ -90,7 +92,7 @@ app.put('/employeeUpdate/:id',[ body('employeeCode').isLength({ min: 4, max:4 })
             }
         )
             .then(result => {
-                alert("Employee Detals Updated");
+                // alert("Employee Detals Updated");
                 res.status(200).json(result);
             })
             

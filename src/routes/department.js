@@ -19,7 +19,7 @@ app.get("/department", (req, res) => {
     });
 });
 //post department data into database
-app.post('/department',[ body('deptCode').isLength({ min: 2, max:4 }) ], function (req, res) {
+app.post('/addDepartment', function (req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -28,7 +28,10 @@ app.post('/department',[ body('deptCode').isLength({ min: 2, max:4 }) ], functio
         var myData = new department(req.body);
         myData.save(function(err, user) {
             if (err) {
-            alert("duplicate value");
+                err
+            }
+            else{
+                res.status(200).json({msg:"ok, Department added"});
             }
         });
     }
@@ -41,10 +44,7 @@ app.delete('/department/:id', async(req, res) => {
         if(err) {
             res.status(200).json({error: err});
         }
-    }).then(res => {
-        alert("department deleted");
-        res.status(200).json({message: "Ok"});
-    });
+    })
 } );
 // get department with id
 app.get("/department/:id", async(req, res) => {
@@ -63,7 +63,7 @@ app.get("/department/:id", async(req, res) => {
 app.put('/department/:id',[ body('deptCode').isLength({ min: 2, max:4 }) ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        alert("department code should be of length 2-4");
+        // alert("department code should be of length 2-4");
         // return res.status(400).json({ errors: errors.array() });
     }
     else{
@@ -82,7 +82,7 @@ app.put('/department/:id',[ body('deptCode').isLength({ min: 2, max:4 }) ], (req
             }
         )
             .then(result => {
-                alert("department updated");           
+                // alert("department updated");           
             })
             .catch(error => console.error(error))
         }
